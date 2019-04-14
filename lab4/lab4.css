@@ -5,11 +5,17 @@ div#topHeaderRow {
    font-size: 0.9em;
 }
 
-.price { 
-
+.price {
+    color: red;
+    font-weight: bold;
+    font-size: large;
 }
 
-.similarTitle {  }
+.similarTitle {
+    font-weight: bold;
+    padding-top: 5px;
+    font-size: 13px;
+}
 
 .cartText { 
 
