@@ -18,7 +18,7 @@
    <![endif]-->
 </head>
 
-<body>
+<body onload="insert()">
 
 <header>
 
@@ -117,7 +117,7 @@
          <h2>View Cart</h2>
       </div>
          
-      <table class="table table-condensed">
+      <table class="table table-condensed" id="table">
          <tr>
             <th>Image</th>
             <th>Product</th>
@@ -125,7 +125,6 @@
             <th>Price</th>
             <th>Amount</th>
          </tr>
-
          <!-- 这是你需要修改的地方 -->
          <!-- 本来是下面这样👇 -->
 
@@ -158,21 +157,21 @@
          $price2 = 700;
         -->
 
-         <tr class="success strong">
+         <tr class="success strong" id="bottom">
             <td colspan="4" class="moveRight">Subtotal</td>
-            <td >$1700</td>
+            <td id="subtotal">$1700</td>
          </tr>
          <tr class="active strong">
             <td colspan="4" class="moveRight">Tax</td>
-            <td>$170</td>
+            <td id="tax">$170</td>
          </tr>  
          <tr class="strong">
             <td colspan="4" class="moveRight">Shipping</td>
-            <td>$100</td>
+            <td id="shipping">$100</td>
          </tr> 
          <tr class="warning strong text-danger">
             <td colspan="4" class="moveRight">Grand Total</td>
-            <td>$1970</td>
+            <td id="grandTotal">$1970</td>
          </tr>    
          <tr >
             <td colspan="4" class="moveRight"><button type="button" class="btn btn-primary" >Continue Shopping</button></td>
@@ -267,4 +266,60 @@
     <script src="bootstrap3_defaultTheme/assets/js/jquery.js"></script>
     <script src="bootstrap3_defaultTheme/dist/js/bootstrap.min.js"></script>    
   </body>
+<script>
+    let subtotal = [];
+    function insert() {
+        for(let i = 0; i < 2; i ++){
+            let bottom = document.getElementById("bottom");
+            let goods = item(i);
+            bottom.parentNode.insertBefore(goods,bottom);
+        }
+        calculate();
+    }
+    function item(index) {
+        let context = document.createElement("tr");
+        let imageBox = document.createElement("td");
+        let product = document.createElement("td");
+        let quantity = document.createElement("td");
+        let price = document.createElement("td");
+        let amount = document.createElement("td");
+        let image = document.createElement("img");
+        if (index === 0){
+            image.src  = "images/art/tiny/116010.jpg";
+            product.innerText = "Artist Holding a Thistle";
+            quantity.innerText = "2";
+            price.innerText  = "$500";
+            amount.innerText = "$1000";
+            subtotal.push(1000);
+        }
+        else {
+            image.src  = "images/art/tiny/113010.jpg";
+            product.innerText = "Self-portrait in a Straw Hat";
+            quantity.innerText = "1";
+            price.innerText  = "$700";
+            amount.innerText = "$700";
+            subtotal.push(700);
+        }
+        image.setAttribute("class","img-thumbnail");
+        imageBox.appendChild(image);
+        context.append(imageBox,product,quantity,price,amount);
+        return context;
+    }
+    function calculate() {
+        let sub = 0;
+        for (let i = 0;i < subtotal.length;i++){
+            sub += subtotal[i];
+        }
+        document.getElementById("subtotal").innerText = "$" + sub;
+        let tax= sub * 0.1;
+        document.getElementById("tax").innerText = "$" + tax;
+        let shipping = 0;
+        if (subtotal <= 1000) {
+            shipping = 40;
+        }
+        document.getElementById("shipping").innerText = "$" + shipping;
+        let grandTotal = sub + tax + shipping;
+        document.getElementById("grandTotal").innerText = "$" + grandTotal;
+    }
+</script>
 </html>
