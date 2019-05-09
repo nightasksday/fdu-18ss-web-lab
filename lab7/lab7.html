@@ -2,8 +2,7 @@
 <head>
 <title>Chapter 10</title>
 <link rel="stylesheet" href="lab7.css">
-<script>
-</script>      
+<script src="http://code.jquery.com/jquery-3.1.0.min.js"></script>
 </head>    
 <body class="tiled">
 <header>
@@ -22,7 +21,7 @@
         </form>    
     </div>
     <figure id="imgManipulated">
-        <img src="images/medium/painting1.jpg" > 
+        <img src="images/medium/painting1.jpg" >
         <figcaption>
             <em>Still Life with Flowers in a Glass Vase</em> <br>
             Jan Davidsz. de Heem, 1650 - 1683
@@ -37,7 +36,54 @@
     </div>
 </main>
 <script>
-
+    $(document).ready(function(){
+        function change(){
+            $("figure img").css("webkit-filter", "opacity("+ $("#numOpacity").text() + "%) "
+                + "saturate("+ $("#numSaturation").text() + "%)"
+                + "brightness("+ $("#numBrightness").text() + "%)"
+                + "hue-rotate("+ $("#numHue").text() + "deg)"
+                + "grayscale("+ $("#numGray").text() + "%)"
+                + "blur("+ $("#numBlur").text() + "px");
+        }
+        $("#thumbBox img").click(function(){
+            $("figure img").attr("src",this.src.replace(/small/,"medium"));
+            $("figcaption").html("<em>" + this.alt + "</em><br>" + this.title);
+        });
+        $("#sliderOpacity").on("input propertyChange",function() {
+            $("#numOpacity").text(this.value);
+            change();
+        });
+        $("#sliderSaturation").on("input propertyChange",function() {
+            $("#numSaturation").text(this.value);
+            change();
+        });
+        $("#sliderBrightness").on("input propertyChange",function() {
+            $("#numBrightness").text(this.value);
+            change();
+        });
+        $("#sliderHue").on("input propertyChange",function() {
+            $("#numHue").text(this.value);
+            change();
+        });
+        $("#sliderGray").on("input propertyChange",function() {
+            $("#numGray").text(this.value);
+            change();
+        });
+        $("#sliderBlur").on("input propertyChange",function() {
+            $("#numBlur").text(this.value);
+            change();
+        });
+        $("#resetFilters").click(function(event){
+            event.preventDefault();
+            $("figure img").css("webkit-filter", "none");
+            $("#sliderOpacity").val(100).next().text(100);
+            $("#sliderSaturation").val(100).next().text(100);
+            $("#sliderBrightness").val(100).next().text(100);
+            $("#sliderHue").val(0).next().text(0);4
+            $("#sliderGray").val(0).next().text(0);
+            $("#sliderBlur").val(0).next().text(0);
+        })
+    })
 </script>    
 </body>   
 </html>
