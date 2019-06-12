@@ -3,8 +3,10 @@
 
 //****** Hint ******
 //connect database and fetch data here
-
-
+$conn = mysqli_connect('localhost','root','yyh15570','travel');
+if (!$conn){
+    die('Fail to connect:'.mysqli_error($conn));
+}
 ?>
 
 <!DOCTYPE html>
@@ -43,11 +45,12 @@
                 <option value="0">Select Continent</option>
                 <?php
                 //Fill this place
-
+                $sqlContinents = 'SELECT * FROM continents';
+                $continents = mysqli_query($conn,$sqlContinents);
                 //****** Hint ******
                 //display the list of continents
 
-                while($row = $result->fetch_assoc()) {
+                while($row = $continents->fetch_assoc()) {
                   echo '<option value=' . $row['ContinentCode'] . '>' . $row['ContinentName'] . '</option>';
                 }
 
@@ -58,9 +61,13 @@
                 <option value="0">Select Country</option>
                 <?php 
                 //Fill this place
-
+                $sqlCountries = 'SELECT * FROM countries';
+                $countries = mysqli_query($conn,$sqlCountries);
                 //****** Hint ******
-                /* display list of countries */ 
+                /* display list of countries */
+                while($row2 = $countries->fetch_assoc()) {
+                    echo '<option value=' . $row2['ISO'] . '>' . $row2['CountryName'] . '</option>';
+                }
                 ?>
               </select>    
               <input type="text"  placeholder="Search title" class="form-control" name=title>
@@ -73,22 +80,50 @@
                                     
 
 		<ul class="caption-style-2">
-            <?php 
+            <?php
+            $sqlImage = 'SELECT * FROM imagedetails';
+            $image = mysqli_query($conn,$sqlImage);
+            $countryValue = $_GET['country'];
             //Fill this place
-
-            //****** Hint ******
-            /* use while loop to display images that meet requirements ... sample below ... replace ???? with field data
+            if (isset($countryValue)){
+                if ($countryValue === '0'){
+                    while($row3 = $image->fetch_assoc()) {
+                        echo '
             <li>
-              <a href="detail.php?id=????" class="img-responsive">
-                <img src="images/square-medium/????" alt="????">
+              <a href="" class="img-responsive">
+                <img style="width: 225px;height: 225px;" src="images/square-medium/'.$row3['Path'].'" alt="'.$row3['Title'].'">
                 <div class="caption">
                   <div class="blur"></div>
                   <div class="caption-text">
-                    <p>????</p>
+                    <p>'.$row3['Title'].'</p>
                   </div>
                 </div>
               </a>
-            </li>        
+            </li>      ';
+                    }
+                }
+                else{
+                    $selectedImage = "SELECT * FROM imagedetails where CountryCodeISO = '$countryValue'";
+                    $specialImage = mysqli_query($conn,$selectedImage);
+                    while($row4 = $specialImage->fetch_assoc()) {
+                        echo '
+            <li>
+              <a href="" class="img-responsive">
+                <img style="width: 225px;height: 225px;" src="images/square-medium/'.$row4['Path'].'" alt="'.$row4['Title'].'">
+                <div class="caption">
+                  <div class="blur"></div>
+                  <div class="caption-text">
+                    <p>'.$row4['Title'].'</p>
+                  </div>
+                </div>
+              </a>
+            </li>      ';
+                    }
+                }
+            }
+            //****** Hint ******
+            /* use while loop to display images that meet requirements ... sample below ... replace ???? with field data
+
             */ 
             ?>
        </ul>       
